@@ -1,0 +1,169 @@
+{
+  "created_at": "2025-10-27",
+  "total_tests": 14,
+  "categories": {
+    "SECURITY": 3,
+    "BUG": 4,
+    "PERFORMANCE": 2,
+    "STYLE": 1,
+    "MAINTAINABILITY": 1,
+    "DOCUMENTATION": 1,
+    "GOOD_CODE": 2
+  },
+  "tests": [
+    {
+      "filename": "security_01_sql_injection.py",
+      "category": "SECURITY",
+      "severity": "CRITICAL",
+      "description": "Classic SQL injection vulnerability using string formatting",
+      "expected_detection": [
+        "SQL injection",
+        "parameterized query",
+        "security vulnerability"
+      ]
+    },
+    {
+      "filename": "security_02_hardcoded_secrets.py",
+      "category": "SECURITY",
+      "severity": "CRITICAL",
+      "description": "Hardcoded API keys and secrets",
+      "expected_detection": [
+        "hardcoded credentials",
+        "secrets",
+        "environment variables"
+      ]
+    },
+    {
+      "filename": "security_03_path_traversal.py",
+      "category": "SECURITY",
+      "severity": "HIGH",
+      "description": "Path traversal vulnerability - user can access any file",
+      "expected_detection": [
+        "path traversal",
+        "input validation",
+        "security"
+      ]
+    },
+    {
+      "filename": "bug_01_missing_error_handling.py",
+      "category": "BUG",
+      "severity": "HIGH",
+      "description": "No error handling for nested dict access and network failures",
+      "expected_detection": [
+        "error handling",
+        "KeyError",
+        "exception",
+        "try-except"
+      ]
+    },
+    {
+      "filename": "bug_02_race_condition.py",
+      "category": "BUG",
+      "severity": "HIGH",
+      "description": "Classic race condition in multi-threaded environment",
+      "expected_detection": [
+        "race condition",
+        "thread-safe",
+        "lock",
+        "concurrency"
+      ]
+    },
+    {
+      "filename": "bug_03_mutable_default.py",
+      "category": "BUG",
+      "severity": "MEDIUM",
+      "description": "Dangerous mutable default arguments",
+      "expected_detection": [
+        "mutable default",
+        "default argument",
+        "shared state"
+      ]
+    },
+    {
+      "filename": "bug_04_resource_leak.py",
+      "category": "BUG",
+      "severity": "MEDIUM",
+      "description": "File handle not closed, especially on exception",
+      "expected_detection": [
+        "resource leak",
+        "context manager",
+        "file not closed",
+        "with statement"
+      ]
+    },
+    {
+      "filename": "performance_01_n_squared.py",
+      "category": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "description": "O(n\u00b2) algorithm when O(n) is possible with sets",
+      "expected_detection": [
+        "O(n\u00b2)",
+        "performance",
+        "set",
+        "optimization"
+      ]
+    },
+    {
+      "filename": "performance_02_repeated_computation.py",
+      "category": "PERFORMANCE",
+      "severity": "MEDIUM",
+      "description": "Expensive operations repeated in loop",
+      "expected_detection": [
+        "repeated computation",
+        "cache",
+        "optimization"
+      ]
+    },
+    {
+      "filename": "style_01_missing_type_hints.py",
+      "category": "STYLE",
+      "severity": "LOW",
+      "description": "Missing type hints for parameters and return value",
+      "expected_detection": [
+        "type hints",
+        "type annotation",
+        "int",
+        "float",
+        "str"
+      ]
+    },
+    {
+      "filename": "style_02_complex_function.py",
+      "category": "MAINTAINABILITY",
+      "severity": "MEDIUM",
+      "description": "Overly complex function with too many parameters and nested logic",
+      "expected_detection": [
+        "complex",
+        "refactor",
+        "too many parameters",
+        "nested conditions"
+      ]
+    },
+    {
+      "filename": "documentation_01_missing_docstring.py",
+      "category": "DOCUMENTATION",
+      "severity": "LOW",
+      "description": "No docstring explaining validation rules",
+      "expected_detection": [
+        "docstring",
+        "documentation",
+        "comment",
+        "explain"
+      ]
+    },
+    {
+      "filename": "good_code_01_well_written.py",
+      "category": "GOOD_CODE",
+      "severity": "NONE",
+      "description": "Well-written code with type hints, docstring, error handling",
+      "expected_detection": []
+    },
+    {
+      "filename": "good_code_02_modern_python.py",
+      "category": "GOOD_CODE",
+      "severity": "NONE",
+      "description": "Modern Python with dataclasses, type hints, validation",
+      "expected_detection": []
+    }
+  ]
+}

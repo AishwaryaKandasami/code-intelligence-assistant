@@ -1,0 +1,3 @@
+> > It can currently be anything (supported by Pydantic: models, dataclasses, typeddicts, etc), but we will have to constrain it to some specific types (perhaps only supporting Pydantic models?) as we will most likely have to assume `__dict__` is present to fetch the instance attributes and pass them to `__new__()`.
+
+Could `TypeAdapter(from_type).dump_python(value)` work instead of `__dict__`?n+

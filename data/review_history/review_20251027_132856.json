@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-10-27T13:28:51.686660",
+  "input": {
+    "code": "\ndef get_user(user_id):\n    query = f'SELECT * FROM users WHERE id = {user_id}'\n    return db.execute(query)\n",
+    "file_path": null,
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11295_comment418",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "You generally don't have much arguments specified in the `Field()` function, so in worst cases this is looking for the index in an array of 5-10 eleme",
+        "reviewer": "Viicos",
+        "similarity": 0.3449585258960724,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11029_comment633",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/concepts/models.md",
+        "code_snippet": "@@ -1419,99 +1469,11 @@ print(error_locations)\n #> [('a',), ('b',), ('c',), ('d',), ('e',)]\n ```\n \n-## Required fields\n-\n-To declare a field as required, you may declare it using an annotation, or an ",
+        "review_comment": "The fields page already has an example using a `default_factory`:\r\n\r\n```python\r\nclass User(BaseModel):\r\n    id: str = Field(default_factory=lambda: uu",
+        "reviewer": "Viicos",
+        "similarity": 0.3423543164363274,
+        "category": "DOCUMENTATION"
+      },
+      {
+        "id": "tiangolo_fastapi_pr10594_comment1629",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/ru/docs/tutorial/security/get-current-user.md",
+        "code_snippet": "@@ -0,0 +1,288 @@\n+# Текущий пользователь",
+        "review_comment": "> Данные текущего пользователя\r\n\r\nТак лучше, спасибо :)\r\n```suggestion\r\n# Данные текущего пользователя\r\n```",
+        "reviewer": "AlertRED",
+        "similarity": 0.33255049657821656,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr13993_comment994",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/en/docs/tutorial/extra-models.md",
+        "code_snippet": "@@ -31,9 +31,9 @@ The examples here use `.dict()` for compatibility with Pydantic v1, but you shou\n \n ///\n \n-### About `**user_in.dict()`\n+### About `**user_in.dict()` { #about-user-in-dict }\n \n-#### ",
+        "review_comment": "```suggestion\r\n#### Pydantic's `.dict()` { #pydantic-dict }\r\n```",
+        "reviewer": "svlandeg",
+        "similarity": 0.29160472893714906,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11295_comment416",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "Are the index calls here expensive? Could we refactor to be slightly more performance friendly?",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.28883257031440734,
+        "category": "PERFORMANCE"
+      }
+    ],
+    "metadata": {
+      "file_path": null,
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 830,
+      "categories_found": [
+        "documentation",
+        "performance"
+      ]
+    }
+  },
+  "review": {
+    "summary": "",
+    "issues": [],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "\n",
+    "metadata": {
+      "model": "google/gemma-2-9b-it:free",
+      "provider": "openrouter",
+      "tokens": 1033,
+      "cost": 0.0,
+      "latency": 1.986572504043579
+    }
+  },
+  "performance": {
+    "total_tokens": 1033,
+    "cost": 0.0,
+    "latency": 1.986572504043579,
+    "model": "google/gemma-2-9b-it:free",
+    "provider": "openrouter"
+  }
+}

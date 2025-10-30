@@ -1,0 +1,108 @@
+{
+  "timestamp": "2025-10-28T20:07:52.370353",
+  "input": {
+    "code": "def get_user_by_id(user_id):\n    \"\"\"Fetch user from database by ID.\"\"\"\n    query = f\"SELECT * FROM users WHERE id = {user_id}\"\n    result = db.execute(query)\n    return result.fetchone()\n",
+    "file_path": "test_cases\\security_01_sql_injection.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11295_comment418",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "You generally don't have much arguments specified in the `Field()` function, so in worst cases this is looking for the index in an array of 5-10 eleme",
+        "reviewer": "Viicos",
+        "similarity": 0.3237070798873901,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr10594_comment1629",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/ru/docs/tutorial/security/get-current-user.md",
+        "code_snippet": "@@ -0,0 +1,288 @@\n+# Текущий пользователь",
+        "review_comment": "> Данные текущего пользователя\r\n\r\nТак лучше, спасибо :)\r\n```suggestion\r\n# Данные текущего пользователя\r\n```",
+        "reviewer": "AlertRED",
+        "similarity": 0.3092655606269836,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr10594_comment1632",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/ru/docs/tutorial/security/get-current-user.md",
+        "code_snippet": "@@ -0,0 +1,288 @@\n+# Данные текущего пользователя\n+\n+В предыдущей главе система безопасности (основанная на системе внедрения зависимостей) передавала *функции операции пути* `токен` в виде `строки`:\n",
+        "review_comment": "Я думаю, что здесь речь идет о корректности передаваемых данных, т.е. о проверке полноты и корректности типов данных внутри объекта.\r\n\r\n(редактор лучш",
+        "reviewer": "alv2017",
+        "similarity": 0.30294182896614075,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11295_comment416",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "Are the index calls here expensive? Could we refactor to be slightly more performance friendly?",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.26204790592193605,
+        "category": "PERFORMANCE"
+      },
+      {
+        "id": "tiangolo_fastapi_pr10594_comment1631",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/ru/docs/tutorial/security/get-current-user.md",
+        "code_snippet": "@@ -0,0 +1,288 @@\n+# Данные текущего пользователя\n+\n+В предыдущей главе система безопасности (основанная на системе внедрения зависимостей) передавала *функции операции пути* `токен` в виде `строки`:\n",
+        "review_comment": "Точно так же, как мы использовали Pydantic для объявления тел запросов, мы можем использовать его где угодно:",
+        "reviewer": "alv2017",
+        "similarity": 0.26194182896614077,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\security_01_sql_injection.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 869,
+      "categories_found": [
+        "performance"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code has a potential SQL injection vulnerability and lacks input validation, making it insecure and inefficient.",
+    "issues": [
+      {
+        "title": "💔 Security - SQL Injection Vulnerability",
+        "details": []
+      },
+      {
+        "title": "🔍 Performance - Inefficient Query",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [
+      "The function has a docstring describing its purpose.",
+      "Example 1: [pydantic/pydantic](https://github.com/pydantic/pydantic/blob/main/mypy.py)",
+      "Example 2: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)",
+      "Example 3: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)",
+      "Example 4: [pydantic/pydantic](https://github.com/pydantic/pydantic/blob/main/mypy.py)",
+      "Example 5: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)"
+    ],
+    "raw_content": "## Summary\nThe provided code has a potential SQL injection vulnerability and lacks input validation, making it insecure and inefficient.\n\n## Issues Found\n\n### 💔 Security - SQL Injection Vulnerability\n**Location**: `query = f\"SELECT * FROM users WHERE id = {user_id}\"`\n**Issue**: Using string formatting to build a SQL query can lead to SQL injection attacks if `user_id` is not sanitized.\n**Suggestion**: Use a parameterized query or an ORM (Object-Relational Mapping) library to prevent SQL injection.\n**Example**: In Pydantic, you can use the `sqlalchemy` ORM to create a query: [pydantic/pydantic#example](https://pydantic.pydantic.org/quickstart/#orm-example)\n\n### 🔍 Performance - Inefficient Query\n**Location**: `result = db.execute(query)`\n**Issue**: The `*` in the SELECT clause retrieves all columns, which may not be necessary and can lead to slower query performance.\n**Suggestion**: Specify only the columns needed to retrieve.\n**Example**: Instead of `SELECT *`, use `SELECT id, name, email` to retrieve only the necessary columns.\n\n## Positive Aspects\n* The function has a docstring describing its purpose.\n\n## References\n* Example 1: [pydantic/pydantic](https://github.com/pydantic/pydantic/blob/main/mypy.py)\n* Example 2: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)\n* Example 3: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)\n* Example 4: [pydantic/pydantic](https://github.com/pydantic/pydantic/blob/main/mypy.py)\n* Example 5: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/main/docs/ru/docs/tutorial/security/get-current-user.md)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1382,
+      "cost": 0.0,
+      "latency": 6.033233404159546
+    }
+  },
+  "performance": {
+    "total_tokens": 1382,
+    "cost": 0.0,
+    "latency": 6.033233404159546,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

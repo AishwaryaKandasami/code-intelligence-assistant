@@ -1,0 +1,109 @@
+{
+  "timestamp": "2025-10-28T20:04:29.221868",
+  "input": {
+    "code": "async def fetch_user_profile(user_id):\n    \"\"\"Fetch user profile from API.\"\"\"\n    response = await http_client.get(f'/users/{user_id}')\n    data = response.json()\n    return {\n        'name': data['profile']['name'],\n        'email': data['contact']['email'],\n        'avatar': data['profile']['images']['avatar']\n    }\n",
+    "file_path": "test_cases\\bug_01_missing_error_handling.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1247",
+        "repo": "tiangolo/fastapi",
+        "file_path": "fastapi/security/http.py",
+        "code_snippet": "@@ -158,8 +158,11 @@ async def __call__(\n             else:\n                 return None\n         if scheme.lower() != \"digest\":\n-            raise HTTPException(\n-                status_code=HTTP_403",
+        "review_comment": "While I see the point, let's stick to the original code formatting throughout this file. Mostly this is a matter of personal preference: while the `el",
+        "reviewer": "svlandeg",
+        "similarity": 0.3112311065196991,
+        "category": "STYLE"
+      },
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1244",
+        "repo": "tiangolo/fastapi",
+        "file_path": "tests/test_security_http_digest_optional.py",
+        "code_snippet": "@@ -66,5 +66,5 @@ def test_security_http_digest_incorrect_scheme_credentials():\n     response = client.get(\n         \"/users/me\", headers={\"Authorization\": \"Other invalidauthorization\"}\n     )\n-    as",
+        "review_comment": "This is the \"optional\" test suite, the exception is tested here: https://github.com/arthurio/fastapi/blob/digest-except/tests/test_security_http_diges",
+        "reviewer": "arthurio",
+        "similarity": 0.3030636370182037,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr11244_comment361",
+        "repo": "pydantic/pydantic",
+        "file_path": "tests/test_type_alias_type.py",
+        "code_snippet": "@@ -387,8 +387,8 @@ class MyModel(BaseModel):\n     assert MyModel(my_int_seq=range(1, 4)).my_int_seq == [1, 2, 3]\n \n     assert MyModel.model_json_schema() == {\n-        '$defs': {'MySeq_int_': {'item",
+        "review_comment": "A note about this change, discussed in detail previously: https://github.com/pydantic/pydantic/pull/10655#discussion_r1846844351",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.28594489979743953,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1246",
+        "repo": "tiangolo/fastapi",
+        "file_path": "fastapi/security/http.py",
+        "code_snippet": "@@ -158,8 +158,11 @@ async def __call__(\n             else:\n                 return None\n         if scheme.lower() != \"digest\":\n-            raise HTTPException(\n-                status_code=HTTP_403",
+        "review_comment": "Good point, I removed the extra statements in the rest of the file as well.",
+        "reviewer": "arthurio",
+        "similarity": 0.2788511037826538,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11831_comment163",
+        "repo": "pydantic/pydantic",
+        "file_path": ".github/actions/people/people.py",
+        "code_snippet": "@@ -302,8 +359,21 @@ def get_graphql_response(\n     *,\n     settings: Settings,\n     query: str,\n-    after: Union[str, None] = None,\n+    after: str | None = None,\n ) -> dict[str, Any]:\n+    \"\"\"Make ",
+        "review_comment": "```suggestion\r\n    \"\"\"Make a GraphQL request to GitHub API.\r\n```",
+        "reviewer": "Viicos",
+        "similarity": 0.2584217443466187,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\bug_01_missing_error_handling.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 910,
+      "categories_found": [
+        "bug",
+        "style"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code fetches a user profile from an API, but could be improved for better readability and maintainability.",
+    "issues": [
+      {
+        "title": "🐛 Bug - Potential KeyError",
+        "details": []
+      },
+      {
+        "title": "🚫 Style - Variable naming",
+        "details": []
+      },
+      {
+        "title": "🚫 Style - Type hints",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [
+      "[tiangolo/fastapi](https://github.com/tiangolo/fastapi)",
+      "[pydantic/pydantic](https://github.com/pydantic/pydantic)"
+    ],
+    "raw_content": "## Summary\nThe provided code fetches a user profile from an API, but could be improved for better readability and maintainability.\n\n## Issues Found\n\n### 🐛 Bug - Potential KeyError\n**Location**: `fetch_user_profile` function\n**Issue**: The function assumes that the JSON response will always contain the keys 'profile', 'contact', and 'images'.\n**Suggestion**: Handle potential KeyError exceptions to make the function more robust.\n**Example**: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/master/tests/test_security_http_digest_optional.py)\n\n### 🚫 Style - Variable naming\n**Location**: `fetch_user_profile` function\n**Issue**: Variable names like `data` could be more descriptive.\n**Suggestion**: Use more descriptive names, e.g., `user_profile_data`.\n**Example**: [pydantic/pydantic](https://github.com/pydantic/pydantic/blob/master/tests/test_type_alias_type.py)\n\n### 🚫 Style - Type hints\n**Location**: `fetch_user_profile` function\n**Issue**: There are no type hints for the return value and function parameters.\n**Suggestion**: Add type hints for better readability and maintainability.\n**Example**: [tiangolo/fastapi](https://github.com/tiangolo/fastapi/blob/master/fastapi/main.py)\n\n## Positive Aspects\nThe code is concise and achieves its purpose.\n\n## References\n* [tiangolo/fastapi](https://github.com/tiangolo/fastapi)\n* [pydantic/pydantic](https://github.com/pydantic/pydantic)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1292,
+      "cost": 0.0,
+      "latency": 2.5927412509918213
+    }
+  },
+  "performance": {
+    "total_tokens": 1292,
+    "cost": 0.0,
+    "latency": 2.5927412509918213,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

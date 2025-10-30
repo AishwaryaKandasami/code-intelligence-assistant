@@ -1,0 +1,133 @@
+{
+  "timestamp": "2025-10-28T20:04:52.403092",
+  "input": {
+    "code": "def add_to_cart(item, cart=[]):\n    \"\"\"Add item to shopping cart.\"\"\"\n    cart.append(item)\n    return cart\n\ndef process_order(items, metadata={}):\n    \"\"\"Process order with metadata.\"\"\"\n    metadata['processed'] = True\n    metadata['items'] = items\n    return metadata\n",
+    "file_path": "test_cases\\bug_03_mutable_default.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr10868_comment705",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/main.py",
+        "code_snippet": "@@ -81,6 +81,20 @@\n _object_setattr = _model_construction.object_setattr\n \n \n+def _model_field_setattr_handler(model: BaseModel, name: str, val: Any) -> None:\n+    model.__dict__[name] = val\n+    mode",
+        "review_comment": "```suggestion\r\n    'validate_assignment': lambda model, name, val: model.__pydantic_validator__.validate_assignment(model, name, val),  # pyright: ign",
+        "reviewer": "Viicos",
+        "similarity": 0.3848993003368378,
+        "category": "SECURITY"
+      },
+      {
+        "id": "pydantic_pydantic_pr11475_comment326",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/json_schema.py",
+        "code_snippet": "@@ -553,10 +552,7 @@ def new_handler_func(\n                 current_handler: GetJsonSchemaHandler = current_handler,\n                 js_modify_function: GetJsonSchemaFunction = js_modify_function,\n  ",
+        "review_comment": "Forgot to add an explanation, but basically this `new_handler_func` is the last handler to be defined. It is the first one to be called, but by callin",
+        "reviewer": "Viicos",
+        "similarity": 0.3783833762873774,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10675_comment648",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_known_annotated_metadata.py",
+        "code_snippet": "@@ -96,22 +96,6 @@\n         CONSTRAINTS_TO_ALLOWED_SCHEMAS[c].update(schemas)\n \n \n-def add_js_update_schema(s: cs.CoreSchema, f: Callable[[], dict[str, Any]]) -> None:\n-    def update_js_schema(s: cs.",
+        "review_comment": "Again... shouldn't be anywhere but `json_schema.py`, but this shouldn't require a functional wrapper here.",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.3441119966506958,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10868_comment706",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/main.py",
+        "code_snippet": "@@ -81,6 +81,20 @@\n _object_setattr = _model_construction.object_setattr\n \n \n+def _model_field_setattr_handler(model: BaseModel, name: str, val: Any) -> None:\n+    model.__dict__[name] = val\n+    mode",
+        "review_comment": "```suggestion\r\n_SIMPLE_SETATTR_HANDLERS: Mapping[str, Callable[[BaseModel, str, Any], None]] = {\r\n```",
+        "reviewer": "Viicos",
+        "similarity": 0.33297730390921887,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10675_comment645",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_generate_schema.py",
+        "code_snippet": "@@ -247,41 +245,17 @@ def apply_each_item_validators(\n     return schema\n \n \n-def modify_model_json_schema(\n-    schema_or_field: CoreSchemaOrField,\n-    handler: GetJsonSchemaHandler,\n-    *,\n-    cl",
+        "review_comment": "See ya! Don't like having this sort of thing here - belongs in `json_schema.py`.",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.3200697946548462,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\bug_03_mutable_default.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 902,
+      "categories_found": [
+        "security"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code has some issues with mutable default arguments and could benefit from additional validation and error handling.",
+    "issues": [
+      {
+        "title": "🐛 [Security] - Mutable Default Argument",
+        "details": [
+          "```python",
+          "def add_to_cart(item, cart=None):",
+          "if cart is None:",
+          "cart = []",
+          "cart.append(item)",
+          "return cart",
+          "def process_order(items, metadata=None):",
+          "if metadata is None:",
+          "metadata = {}",
+          "metadata['processed'] = True",
+          "metadata['items'] = items",
+          "return metadata",
+          "```"
+        ]
+      },
+      {
+        "title": "🐛 [Best Practices] - Missing Validation",
+        "details": [
+          "```python",
+          "def add_to_cart(item, cart=None):",
+          "if not isinstance(item, dict):",
+          "raise ValueError(\"Item must be a dictionary\")",
+          "if cart is None:",
+          "cart = []",
+          "cart.append(item)",
+          "return cart",
+          "def process_order(items, metadata=None):",
+          "if not isinstance(items, list):",
+          "raise ValueError(\"Items must be a list\")",
+          "if metadata is None:",
+          "metadata = {}",
+          "metadata['processed'] = True",
+          "metadata['items'] = items",
+          "return metadata",
+          "```"
+        ]
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "## Summary\nThe provided code has some issues with mutable default arguments and could benefit from additional validation and error handling.\n\n## Issues Found\n\n### 🐛 [Security] - Mutable Default Argument\n**Location**: `add_to_cart` and `process_order` functions\n**Issue**: The use of mutable default arguments (`cart=[]` and `metadata={}`) can lead to unexpected behavior and potential security vulnerabilities.\n**Suggestion**: Use `None` as the default argument and initialize the mutable object inside the function.\n**Example**: Similar to [pydantic/pydantic](Example 1) where default arguments are avoided to prevent potential security issues.\n\n```python\ndef add_to_cart(item, cart=None):\n    if cart is None:\n        cart = []\n    cart.append(item)\n    return cart\n\ndef process_order(items, metadata=None):\n    if metadata is None:\n        metadata = {}\n    metadata['processed'] = True\n    metadata['items'] = items\n    return metadata\n```\n\n### 🐛 [Best Practices] - Missing Validation\n**Location**: `add_to_cart` and `process_order` functions\n**Issue**: The functions do not validate their inputs, which can lead to unexpected behavior.\n**Suggestion**: Add input validation to ensure the functions receive the expected types and values.\n**Example**: Similar to [pydantic/pydantic](Example 2) where input validation is performed to ensure correct data types.\n\n```python\ndef add_to_cart(item, cart=None):\n    if not isinstance(item, dict):\n        raise ValueError(\"Item must be a dictionary\")\n    if cart is None:\n        cart = []\n    cart.append(item)\n    return cart\n\ndef process_order(items, metadata=None):\n    if not isinstance(items, list):\n        raise ValueError(\"Items must be a list\")\n    if metadata is None:\n        metadata = {}\n    metadata['processed'] = True\n    metadata['items'] = items\n    return metadata\n```\n\n## Positive Aspects\nThe code is well-structured and easy to read, with clear function names and docstrings.\n\n## References\n[pydantic/pydantic](Example 1), [pydantic/pydantic](Example 2)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1424,
+      "cost": 0.0,
+      "latency": 19.43724226951599
+    }
+  },
+  "performance": {
+    "total_tokens": 1424,
+    "cost": 0.0,
+    "latency": 19.43724226951599,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

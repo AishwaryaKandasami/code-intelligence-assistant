@@ -1,0 +1,94 @@
+{
+  "timestamp": "2025-10-27T13:42:56.353918",
+  "input": {
+    "code": "\ndef find_duplicates(items):\n    dupes = []\n    for i in range(len(items)):\n        for j in range(i + 1, len(items)):\n            if items[i] == items[j]:\n                dupes.append(items[i])\n    return dupes\n",
+    "file_path": null,
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11295_comment418",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "You generally don't have much arguments specified in the `Field()` function, so in worst cases this is looking for the index in an array of 5-10 eleme",
+        "reviewer": "Viicos",
+        "similarity": 0.34412110567092896,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11982_comment70",
+        "repo": "pydantic/pydantic",
+        "file_path": "pyproject.toml",
+        "code_snippet": "@@ -207,12 +207,13 @@ select = [\n     'T10',    # flake8-debugger\n     'T20',    # flake8-print\n     'C4',     # flake8-comprehensions\n+    'PIE',    # flake8-pie\n     'PYI006', # flake8-pyi\n     'PYI",
+        "review_comment": "Actually let's include `PIE790`, I think it is worth being included. I've checked `PIE804`, and I'm not sure why we get so many violations in the test",
+        "reviewer": "Viicos",
+        "similarity": 0.33682478189468384,
+        "category": "TESTING"
+      },
+      {
+        "id": "pydantic_pydantic_pr10863_comment134",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_core_utils.py",
+        "code_snippet": "@@ -66,6 +67,7 @@ def is_list_like_schema_with_items_schema(\n     return schema['type'] in _LIST_LIKE_SCHEMA_WITH_ITEMS_TYPES\n \n \n+@lru_cache",
+        "review_comment": "It could be maybe simple as:\r\n\r\n```python\r\nclass _TypeRefCache(WeakKeyDictionary):\r\n    def __setitem__(self, key: type[Any], value: Any) -> None:\r\n  ",
+        "reviewer": "MarkusSintonen",
+        "similarity": 0.3272809720039368,
+        "category": "PERFORMANCE"
+      },
+      {
+        "id": "pydantic_pydantic_pr11432_comment349",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/main.py",
+        "code_snippet": "@@ -977,13 +999,36 @@ def __delattr__(self, item: str) -> Any:\n                     del self.__pydantic_private__[item]  # type: ignore\n                     return\n                 except KeyError as ",
+        "review_comment": "We should make this consistent with the above pattern.\r\n\r\nIt's hard - we're not at the 3 repetition rule here that necessitates abstraction. I'm ok wi",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.30770323276519773,
+        "category": "STYLE"
+      },
+      {
+        "id": "pydantic_pydantic_pr11982_comment69",
+        "repo": "pydantic/pydantic",
+        "file_path": "pyproject.toml",
+        "code_snippet": "@@ -207,12 +207,13 @@ select = [\n     'T10',    # flake8-debugger\n     'T20',    # flake8-print\n     'C4',     # flake8-comprehensions\n+    'PIE',    # flake8-pie\n     'PYI006', # flake8-pyi\n     'PYI",
+        "review_comment": "These two are broadly violated in this codebase, and PIE790 is a commonly ignored rule.",
+        "reviewer": "cclauss",
+        "similarity": 0.25763876748085024,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": null,
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 899,
+      "categories_found": [
+        "testing",
+        "style",
+        "performance"
+      ]
+    }
+  },
+  "review": {
+    "summary": "",
+    "issues": [],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "\n\n",
+    "metadata": {
+      "model": "google/gemma-2-9b-it:free",
+      "provider": "openrouter",
+      "tokens": 1136,
+      "cost": 0.0,
+      "latency": 4.6498799324035645
+    }
+  },
+  "performance": {
+    "total_tokens": 1136,
+    "cost": 0.0,
+    "latency": 4.6498799324035645,
+    "model": "google/gemma-2-9b-it:free",
+    "provider": "openrouter"
+  }
+}

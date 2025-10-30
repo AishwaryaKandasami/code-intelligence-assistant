@@ -1,0 +1,104 @@
+{
+  "timestamp": "2025-10-28T13:10:17.481094",
+  "input": {
+    "code": "async def fetch_user_profile(user_id):\n    \"\"\"Fetch user profile from API.\"\"\"\n    response = await http_client.get(f'/users/{user_id}')\n    data = response.json()\n    return {\n        'name': data['profile']['name'],\n        'email': data['contact']['email'],\n        'avatar': data['profile']['images']['avatar']\n    }\n",
+    "file_path": "test_cases\\bug_01_missing_error_handling.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1247",
+        "repo": "tiangolo/fastapi",
+        "file_path": "fastapi/security/http.py",
+        "code_snippet": "@@ -158,8 +158,11 @@ async def __call__(\n             else:\n                 return None\n         if scheme.lower() != \"digest\":\n-            raise HTTPException(\n-                status_code=HTTP_403",
+        "review_comment": "While I see the point, let's stick to the original code formatting throughout this file. Mostly this is a matter of personal preference: while the `el",
+        "reviewer": "svlandeg",
+        "similarity": 0.3112311065196991,
+        "category": "STYLE"
+      },
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1244",
+        "repo": "tiangolo/fastapi",
+        "file_path": "tests/test_security_http_digest_optional.py",
+        "code_snippet": "@@ -66,5 +66,5 @@ def test_security_http_digest_incorrect_scheme_credentials():\n     response = client.get(\n         \"/users/me\", headers={\"Authorization\": \"Other invalidauthorization\"}\n     )\n-    as",
+        "review_comment": "This is the \"optional\" test suite, the exception is tested here: https://github.com/arthurio/fastapi/blob/digest-except/tests/test_security_http_diges",
+        "reviewer": "arthurio",
+        "similarity": 0.3030636370182037,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr11244_comment361",
+        "repo": "pydantic/pydantic",
+        "file_path": "tests/test_type_alias_type.py",
+        "code_snippet": "@@ -387,8 +387,8 @@ class MyModel(BaseModel):\n     assert MyModel(my_int_seq=range(1, 4)).my_int_seq == [1, 2, 3]\n \n     assert MyModel.model_json_schema() == {\n-        '$defs': {'MySeq_int_': {'item",
+        "review_comment": "A note about this change, discussed in detail previously: https://github.com/pydantic/pydantic/pull/10655#discussion_r1846844351",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.28594489979743953,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1246",
+        "repo": "tiangolo/fastapi",
+        "file_path": "fastapi/security/http.py",
+        "code_snippet": "@@ -158,8 +158,11 @@ async def __call__(\n             else:\n                 return None\n         if scheme.lower() != \"digest\":\n-            raise HTTPException(\n-                status_code=HTTP_403",
+        "review_comment": "Good point, I removed the extra statements in the rest of the file as well.",
+        "reviewer": "arthurio",
+        "similarity": 0.2788511037826538,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11831_comment163",
+        "repo": "pydantic/pydantic",
+        "file_path": ".github/actions/people/people.py",
+        "code_snippet": "@@ -302,8 +359,21 @@ def get_graphql_response(\n     *,\n     settings: Settings,\n     query: str,\n-    after: Union[str, None] = None,\n+    after: str | None = None,\n ) -> dict[str, Any]:\n+    \"\"\"Make ",
+        "review_comment": "```suggestion\r\n    \"\"\"Make a GraphQL request to GitHub API.\r\n```",
+        "reviewer": "Viicos",
+        "similarity": 0.2584217443466187,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\bug_01_missing_error_handling.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 910,
+      "categories_found": [
+        "bug",
+        "style"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code fetches a user's profile from an API, but could benefit from improvements in error handling and code organization.",
+    "issues": [
+      {
+        "title": "🐛 [Style] - Unnecessary JSON Parsing",
+        "details": []
+      },
+      {
+        "title": "🐛 [Error Handling] - Missing Exception Handling",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [
+      ""
+    ],
+    "raw_content": "## Summary\nThe provided code fetches a user's profile from an API, but could benefit from improvements in error handling and code organization.\n\n## Issues Found\n\n### 🐛 [Style] - Unnecessary JSON Parsing\n**Location**: `fetch_user_profile` function\n**Issue**: The `response.json()` call is not necessary as the `get` method of the `http_client` object likely returns a JSON response directly.\n**Suggestion**: Remove the `response.json()` call and directly return the response data.\n**Example**: Similar to example 1, we should stick to the original code formatting and avoid unnecessary steps.\n\n### 🐛 [Error Handling] - Missing Exception Handling\n**Location**: `fetch_user_profile` function\n**Issue**: The function does not handle potential exceptions that may occur during the API call, such as network errors or invalid responses.\n**Suggestion**: Add try-except blocks to handle potential exceptions and provide meaningful error messages.\n**Example**: Similar to example 2, we should consider testing for edge cases and providing informative error messages.\n\n## Positive Aspects\nThe code is generally well-structured and follows a clear and concise naming convention.\n\n## References\nThe following example reviews were most relevant: example 1 (style), example 2 (bug), example 3 (general), example 4 (general), and example 5 (general).\n\n---\n\n```python\nasync def fetch_user_profile(user_id):\n    \"\"\"Fetch user profile from API.\"\"\"\n    try:\n        response = await http_client.get(f'/users/{user_id}')\n        response.raise_for_status()  # Raise an exception for bad status codes\n        return response.json()\n    except requests.RequestException as e:\n        # Log the exception and return an error message\n        logging.error(f\"Error fetching user profile: {e}\")\n        return {\"error\": \"Failed to fetch user profile\"}\n```",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1370,
+      "cost": 0.0,
+      "latency": 5.525528192520142
+    }
+  },
+  "performance": {
+    "total_tokens": 1370,
+    "cost": 0.0,
+    "latency": 5.525528192520142,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

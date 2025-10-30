@@ -1,0 +1,102 @@
+{
+  "timestamp": "2025-10-28T20:08:17.359213",
+  "input": {
+    "code": "import requests\n\ndef connect_to_api():\n    \"\"\"Connect to payment API.\"\"\"\n    api_key = \"sk_live_51HxYZ123456789\"\n    secret = \"whsec_abcdef123456\"\n    \n    headers = {\n        'Authorization': f'Bearer {api_key}',\n        'X-Secret': secret\n    }\n    return requests.get('https://api.payment.com/charge', headers=headers)\n",
+    "file_path": "test_cases\\security_02_hardcoded_secrets.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1244",
+        "repo": "tiangolo/fastapi",
+        "file_path": "tests/test_security_http_digest_optional.py",
+        "code_snippet": "@@ -66,5 +66,5 @@ def test_security_http_digest_incorrect_scheme_credentials():\n     response = client.get(\n         \"/users/me\", headers={\"Authorization\": \"Other invalidauthorization\"}\n     )\n-    as",
+        "review_comment": "This is the \"optional\" test suite, the exception is tested here: https://github.com/arthurio/fastapi/blob/digest-except/tests/test_security_http_diges",
+        "reviewer": "arthurio",
+        "similarity": 0.4202629387378693,
+        "category": "BUG"
+      },
+      {
+        "id": "tiangolo_fastapi_pr9829_comment1018",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/en/docs/tutorial/cors.md",
+        "code_snippet": "@@ -58,7 +58,7 @@ The following arguments are supported:\n * `allow_origin_regex` - A regex string to match against origins that should be permitted to make cross-origin requests. e.g. `'https://.*\\.ex",
+        "review_comment": "Change that line to this:\r\n\r\n* `allow_credentials` - Indicates whether cookies should be supported for cross-origin requests. Defaults to `False`. You",
+        "reviewer": "codespearhead",
+        "similarity": 0.4125269314517146,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr2939_comment1247",
+        "repo": "tiangolo/fastapi",
+        "file_path": "fastapi/security/http.py",
+        "code_snippet": "@@ -158,8 +158,11 @@ async def __call__(\n             else:\n                 return None\n         if scheme.lower() != \"digest\":\n-            raise HTTPException(\n-                status_code=HTTP_403",
+        "review_comment": "While I see the point, let's stick to the original code formatting throughout this file. Mostly this is a matter of personal preference: while the `el",
+        "reviewer": "svlandeg",
+        "similarity": 0.39468029944793037,
+        "category": "STYLE"
+      },
+      {
+        "id": "tiangolo_fastapi_pr9829_comment1017",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/en/docs/tutorial/cors.md",
+        "code_snippet": "@@ -58,7 +58,7 @@ The following arguments are supported:\n * `allow_origin_regex` - A regex string to match against origins that should be permitted to make cross-origin requests. e.g. `'https://.*\\.ex",
+        "review_comment": "```suggestion\r\n* `allow_credentials` - Indicate that cookies should be supported for cross-origin requests. Defaults to `False`. \r\n\r\nNone of `allow_or",
+        "reviewer": "mikeedjones",
+        "similarity": 0.389205016778863,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr13091_comment1419",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/zh/docs/advanced/openapi-webhooks.md",
+        "code_snippet": "@@ -0,0 +1,55 @@\n+# OpenAPI 网络钩子\n+\n+有些情况下，您可能想告诉您的 API **用户**，您的应用程序可以调用*他们的*应用程序（给它们发送请求）并附带一些数据，通常是为了**通知**某种**事件**。\n+\n+这意味着，不再是您的用户向您的 API 发送请求，而是**您的 API**（或您的应用）可以向**他们的系统**（他们的 API，他们的应用）**发送请求*",
+        "review_comment": "```suggestion\n这意味着，除了您的用户向您的 API 发送请求的一般情况，**您的 API**（或您的应用）也可以向**他们的系统**（他们的 API、他们的应用）**发送请求**。\n```\n\n- \"instead of\" 也可以对应汉语中的“除了……也”联词\n- 英文逗号 \",\" 在某",
+        "reviewer": "Vincy1230",
+        "similarity": 0.3817397117614746,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\security_02_hardcoded_secrets.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 961,
+      "categories_found": [
+        "style",
+        "bug"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code has some improvements to be made to follow best practices and enhance security.",
+    "issues": [
+      {
+        "title": "🚨 [Security] - Hardcoded API Keys",
+        "details": []
+      },
+      {
+        "title": "💡 [Style] - Redundant Import",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "## Summary\nThe provided code has some improvements to be made to follow best practices and enhance security.\n\n## Issues Found\n\n### 🚨 [Security] - Hardcoded API Keys\n**Location**: `connect_to_api()` function\n**Issue**: Hardcoded API keys (`api_key` and `secret`) are exposed in the code, which is a security risk.\n**Suggestion**: Consider using environment variables or a secrets management system to store and retrieve sensitive data.\n**Example**: [tiangolo/fastapi] (Similarity: 0.42) - [Example 1](#example-1---tiangolo-fastapi-similarity-042)\n\n### 💡 [Style] - Redundant Import\n**Location**: `connect_to_api()` function\n**Issue**: The `requests` library is imported but not used consistently throughout the code. Consider removing the import or using a consistent naming convention.\n**Suggestion**: Remove the import or rename the imported library to match the used name.\n**Example**: [tiangolo/fastapi] (Similarity: 0.39) - [Example 3](#example-3---tiangolo-fastapi-similarity-039)\n\n## Positive Aspects\nThe code is concise and easy to read.\n\n## References\n[tiangolo/fastapi] (Similarity: 0.42) - [Example 1](#example-1---tiangolo-fastapi-similarity-042)\n[tiangolo/fastapi] (Similarity: 0.39) - [Example 3](#example-3---tiangolo-fastapi-similarity-039)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1424,
+      "cost": 0.0,
+      "latency": 10.816322803497314
+    }
+  },
+  "performance": {
+    "total_tokens": 1424,
+    "cost": 0.0,
+    "latency": 10.816322803497314,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

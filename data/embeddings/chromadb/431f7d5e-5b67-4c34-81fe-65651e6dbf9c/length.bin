@@ -1,0 +1,20 @@
+File: tests/mypy/modules/frozen_field.py
+
+Code:
+@@ -8,3 +8,16 @@ class Foo(BaseModel):
+ foo = Foo()
+ 
+ foo.a = 2
++
++
++class Parent(BaseModel):
++    parent_attr: str = Field(exclude=True)
++
++
++# We don't wan't to froze `parent_attr` in the plugin:
+
+Review: I see, maybe this is clearer:
+
+```suggestion
+# `parent_attr` is writable, mypy should error when overriding with a read-only property
+```\"\"xpe

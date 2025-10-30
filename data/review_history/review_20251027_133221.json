@@ -1,0 +1,93 @@
+{
+  "timestamp": "2025-10-27T13:31:51.798554",
+  "input": {
+    "code": "\ndef get_user(user_id):\n    query = f'SELECT * FROM users WHERE id = {user_id}'\n    return db.execute(query)\n",
+    "file_path": null,
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11295_comment418",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "You generally don't have much arguments specified in the `Field()` function, so in worst cases this is looking for the index in an array of 5-10 eleme",
+        "reviewer": "Viicos",
+        "similarity": 0.3449585258960724,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11029_comment633",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/concepts/models.md",
+        "code_snippet": "@@ -1419,99 +1469,11 @@ print(error_locations)\n #> [('a',), ('b',), ('c',), ('d',), ('e',)]\n ```\n \n-## Required fields\n-\n-To declare a field as required, you may declare it using an annotation, or an ",
+        "review_comment": "The fields page already has an example using a `default_factory`:\r\n\r\n```python\r\nclass User(BaseModel):\r\n    id: str = Field(default_factory=lambda: uu",
+        "reviewer": "Viicos",
+        "similarity": 0.3423543164363274,
+        "category": "DOCUMENTATION"
+      },
+      {
+        "id": "tiangolo_fastapi_pr10594_comment1629",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/ru/docs/tutorial/security/get-current-user.md",
+        "code_snippet": "@@ -0,0 +1,288 @@\n+# Текущий пользователь",
+        "review_comment": "> Данные текущего пользователя\r\n\r\nТак лучше, спасибо :)\r\n```suggestion\r\n# Данные текущего пользователя\r\n```",
+        "reviewer": "AlertRED",
+        "similarity": 0.33255049657821656,
+        "category": null
+      },
+      {
+        "id": "tiangolo_fastapi_pr13993_comment994",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/en/docs/tutorial/extra-models.md",
+        "code_snippet": "@@ -31,9 +31,9 @@ The examples here use `.dict()` for compatibility with Pydantic v1, but you shou\n \n ///\n \n-### About `**user_in.dict()`\n+### About `**user_in.dict()` { #about-user-in-dict }\n \n-#### ",
+        "review_comment": "```suggestion\r\n#### Pydantic's `.dict()` { #pydantic-dict }\r\n```",
+        "reviewer": "svlandeg",
+        "similarity": 0.29160472893714906,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11295_comment416",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/mypy.py",
+        "code_snippet": "@@ -1040,15 +1040,17 @@ def get_alias_info(stmt: AssignmentStmt) -> tuple[str | None, bool]:\n             # Assigned value is not a call to pydantic.fields.Field\n             return None, False\n \n-   ",
+        "review_comment": "Are the index calls here expensive? Could we refactor to be slightly more performance friendly?",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.28883257031440734,
+        "category": "PERFORMANCE"
+      }
+    ],
+    "metadata": {
+      "file_path": null,
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 830,
+      "categories_found": [
+        "performance",
+        "documentation"
+      ]
+    }
+  },
+  "review": {
+    "summary": "",
+    "issues": [],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "\nLet's break down how to create and use code review guidelines.\n\n**Why Code Reviews Matter:**\n\nCode reviews are essential for several reasons:\n\n* **Quality Improvement:**  They help catch bugs, security vulnerabilities, and design flaws early in the development process.\n* **Knowledge Sharing:**  Reviewers learn from each other, improving team understanding of codebases and best practices.\n* **Consistency:** Reviews promote adherence to coding standards, making codebases more maintainable and readable.\n* **Documentation:** Reviews often lead to better documentation as code is explained and clarified.\n* **Onboarding:** New team members benefit greatly from code reviews, quickly learning the team's style and conventions.\n\n**Creating Effective Code Review Guidelines:**\n\n1. **Focus on the \"Why\":**\n\n   Start by clearly stating the purpose of code reviews. Emphasize the goals of improving code quality, knowledge sharing, and team cohesion.\n\n2. **Define Scope:**\n\n   * **What types of code are reviewed?** (New features, bug fixes, refactoring, etc.)\n   * **Who reviews what?** (Peer reviews, senior developer reviews, etc.)\n   * **What level of detail is expected?** (High-level overview, line-by-line analysis, etc.)\n\n3. **Coding Standards:**\n\n   * **Style:** Specify conventions for naming, indentation, spacing, comments, and formatting (e.g., using a linter).\n   * **Best Practices:** Outline general coding principles (e.g., SOLID principles, DRY, KISS).\n   * **Error Handling:**  Define how to handle exceptions and potential errors gracefully.\n\n4. **Review Criteria:**\n\n   * **Functionality:** Does the code correctly implement the intended behavior?\n   * **Readability:** Is the code clear, concise, and easy to understand?\n   * **Maintainability:** Can the code be easily modified and extended in the future?\n   * **Security:** Are there any potential vulnerabilities?\n   * **Performance:** Is the code efficient?\n\n5. **Review Process:**\n\n   * **Tools:**  Choose a code review platform (e.g., GitHub, GitLab, Bitbucket).\n   * **Workflow:**  Define the steps involved (e.g., creating pull requests, assigning reviewers, addressing comments).\n   * **Turnaround Time:** Set reasonable expectations for review times.\n\n6. **Communication:**\n\n   * **Be Constructive:** Provide specific, actionable feedback. Avoid personal attacks.\n   * **Explain Your Reasoning:**  Clearly state the reasons behind your comments.\n   * **Be Open to Discussion:**  Engage in a respectful dialogue with the author.\n\n7. **Continuous Improvement:**\n\n   * **Regularly Review Guidelines:** Update guidelines as the team's needs evolve.\n   * **Gather Feedback from Reviewers:** Ask for input on what's working well and what could be improved.\n   * **Track and Measure:** Monitor the effectiveness of your guidelines.\n\n**Example Code Review Guideline Snippet:**\n\n**Functionality**\n\n* The code should implement the specified requirements accurately.\n* All test cases should pass.\n\n**Readability**\n\n* Use meaningful variable and function names.\n* Write concise and well-commented code.\n* Follow the team's coding style guide (link to style guide).\n\n\nLet me know if you'd like more specific examples or help tailoring guidelines for your team!",
+    "metadata": {
+      "model": "google/gemma-2-9b-it:free",
+      "provider": "openrouter",
+      "tokens": 1749,
+      "cost": 0.0,
+      "latency": 27.79897928237915
+    }
+  },
+  "performance": {
+    "total_tokens": 1749,
+    "cost": 0.0,
+    "latency": 27.79897928237915,
+    "model": "google/gemma-2-9b-it:free",
+    "provider": "openrouter"
+  }
+}

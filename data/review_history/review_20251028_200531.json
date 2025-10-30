@@ -1,0 +1,105 @@
+{
+  "timestamp": "2025-10-28T20:05:21.575836",
+  "input": {
+    "code": "def process_log_file(filepath):\n    \"\"\"Process application log file.\"\"\"\n    file = open(filepath, 'r')\n    lines = []\n    \n    for line in file:\n        if 'ERROR' in line:\n            lines.append(line.strip())\n    \n    if len(lines) > 1000:\n        raise ValueError(\"Too many errors\")\n    \n    return lines\n",
+    "file_path": "test_cases\\bug_04_resource_leak.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11473_comment314",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/errors/errors.md",
+        "code_snippet": "@@ -2,40 +2,42 @@\n Pydantic will raise a [`ValidationError`][pydantic_core.ValidationError] whenever it finds an error in the data it's validating.\n \n !!! note\n-    Validation code should not raise `V",
+        "review_comment": "````suggestion\n| [`json()`][pydantic_core.ValidationError.json]               | Returns a JSON representation of the list errors.                     ",
+        "reviewer": "hyperlint-ai[bot]",
+        "similarity": 0.404432076215744,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr10846_comment489",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -316,6 +322,15 @@ def min_length_validator(x: Any, min_length: Any) -> Any:\n             )\n         return x\n     except TypeError:\n+        if isinstance(x, pathlib.PurePath):\n+            try:\n+ ",
+        "review_comment": "https://docs.python.org/3/library/pathlib.html\r\n\r\n> Calling [bytes](https://docs.python.org/3/library/stdtypes.html#bytes) is only recommended under U",
+        "reviewer": "adriangb",
+        "similarity": 0.39544049842017037,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11473_comment315",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/errors/errors.md",
+        "code_snippet": "@@ -2,40 +2,42 @@\n Pydantic will raise a [`ValidationError`][pydantic_core.ValidationError] whenever it finds an error in the data it's validating.\n \n !!! note\n-    Validation code should not raise `V",
+        "review_comment": "This validators section already covers what was said below about custom errors, so I removed it to avoid duplication",
+        "reviewer": "Viicos",
+        "similarity": 0.3652218852043152,
+        "category": "BUG"
+      },
+      {
+        "id": "tiangolo_fastapi_pr12706_comment1885",
+        "repo": "tiangolo/fastapi",
+        "file_path": "docs/pt/docs/tutorial/request-files.md",
+        "code_snippet": "@@ -315,49 +153,7 @@ Eles serão associados ao mesmo \"campo de formulário\" enviado usando \"dados de\n \n Para usar isso, declare uma lista de `bytes` ou `UploadFile`:\n \n-//// tab | Python 3.9+\n-\n-```Pyth",
+        "review_comment": "here to:\r\n\r\n{* ../../docs_src/request_files/tutorial002_an_py39.py hl[10,15] *}",
+        "reviewer": "ceb10n",
+        "similarity": 0.33433919930458067,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10846_comment485",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -316,6 +322,15 @@ def min_length_validator(x: Any, min_length: Any) -> Any:\n             )\n         return x\n     except TypeError:\n+        if isinstance(x, pathlib.PurePath):\n+            try:\n+ ",
+        "review_comment": "As mentioned above, I'd really prefer if this wasn't the long term solution here.",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.3212447376932417,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\bug_04_resource_leak.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 910,
+      "categories_found": [
+        "bug"
+      ]
+    }
+  },
+  "review": {
+    "summary": "This function processes a log file and extracts lines containing the word \"ERROR\" but has a potential bug and room for improvement in error handling.",
+    "issues": [
+      {
+        "title": "🐛 [bug] - Potential IndexError",
+        "details": []
+      },
+      {
+        "title": "🛣️ [general] - Potential Performance Issue",
+        "details": []
+      },
+      {
+        "title": "🚫 [general] - Potential ValueError",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "## Summary\nThis function processes a log file and extracts lines containing the word \"ERROR\" but has a potential bug and room for improvement in error handling.\n\n## Issues Found\n\n### 🐛 [bug] - Potential IndexError\n**Location**: lines 4-5\n**Issue**: The function will raise an `IndexError` when trying to access `line` if the file is empty.\n**Suggestion**: Check if the file is not empty before trying to read from it.\n**Example**: Similar to [Example 1](#example-1-pydantic/pydantic), consider using a try-except block to handle potential indexing errors.\n\n### 🛣️ [general] - Potential Performance Issue\n**Location**: lines 6-7\n**Issue**: Reading the entire file into memory at once may be inefficient for large log files. Consider processing the file line by line to avoid this.\n**Suggestion**: Iterate over the file object directly instead of reading it all into memory at once.\n**Example**: Similar to [Example 4](#example-4-tiangolo/fastapi), consider using a generator to process the file line by line.\n\n### 🚫 [general] - Potential ValueError\n**Location**: lines 8-9\n**Issue**: The function raises a `ValueError` when there are more than 1000 error lines. Consider using a more specific error message or handling this case differently.\n**Suggestion**: Raise a custom error with a more informative message or handle this case in a way that makes sense for your application.\n**Example**: Similar to [Example 2](#example-2-pydantic/pydantic), consider raising a custom error with additional information.\n\n## Positive Aspects\nThe function has a clear and concise docstring and uses a simple and straightforward approach to process the log file.\n\n## References\n[Example 1](#example-1-pydantic/pydantic), [Example 2](#example-2-pydantic/pydantic), [Example 4](#example-4-tiangolo/fastapi)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1385,
+      "cost": 0.0,
+      "latency": 7.478352069854736
+    }
+  },
+  "performance": {
+    "total_tokens": 1385,
+    "cost": 0.0,
+    "latency": 7.478352069854736,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

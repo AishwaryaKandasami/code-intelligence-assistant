@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+.env
+*.log
+
+# Data
+data/embeddings/*.npy
+data/embeddings/*.pkl
+data/*.json
+!data/.gitkeep
+
+# Outputs
+reviews/*.json
+reviews/*.md
+!reviews/.gitkeep
+TEST_RESULTS_REPORT.md
+
+# IDE
+.vscode/
+.idea/
+.DS_Storevenv_backup/
+venv_backup/
+venv/

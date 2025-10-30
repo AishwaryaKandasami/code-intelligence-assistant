@@ -1,0 +1,110 @@
+{
+  "timestamp": "2025-10-28T20:06:47.526190",
+  "input": {
+    "code": "from dataclasses import dataclass\nfrom typing import Optional\nfrom datetime import datetime\n\n@dataclass\nclass User:\n    \"\"\"User model with validation.\"\"\"\n    id: int\n    email: str\n    name: str\n    created_at: datetime\n    is_active: bool = True\n    \n    def __post_init__(self):\n        \"\"\"Validate user data.\"\"\"\n        if not self.email or '@' not in self.email:\n            raise ValueError(f\"Invalid email: {self.email}\")\n        \n        if not self.name or len(self.name) < 2:\n            raise ValueError(\"Name must be at least 2 characters\")\n    \n    def deactivate(self) -> None:\n        \"\"\"Deactivate user account.\"\"\"\n        self.is_active = False\n    \n    @property\n    def age_days(self) -> int:\n        \"\"\"Get account age in days.\"\"\"\n        return (datetime.now() - self.created_at).days\n",
+    "file_path": "test_cases\\good_code_02_modern_python.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr11029_comment619",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/concepts/fields.md",
+        "code_snippet": "@@ -54,30 +106,42 @@ print(user.username)\n The `data` argument will *only* contain the already validated data, based on the [order of model fields](./models.md#field-ordering)\n (the above example woul",
+        "review_comment": "Replaced by the new section, which is a bit more generic in the sense that it doesn't restrict to `Field`. The below example wasn't a good one either,",
+        "reviewer": "Viicos",
+        "similarity": 0.44526660757906295,
+        "category": "DOCUMENTATION"
+      },
+      {
+        "id": "pydantic_pydantic_pr11769_comment187",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/dataclasses.py",
+        "code_snippet": "@@ -264,6 +265,35 @@ def create_dataclass(cls: type[Any]) -> type[PydanticDataclass]:\n             **kwargs,\n         )\n \n+        if config_wrapper.validate_assignment:\n+\n+            @functools.wrap",
+        "review_comment": "Pickling is used with the assumption that the data is trusted already (if you need validation to be performed, then you have bigger problems as you ar",
+        "reviewer": "Viicos",
+        "similarity": 0.4234649423290701,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr11060_comment562",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/functional_validators.py",
+        "code_snippet": "@@ -86,7 +86,7 @@ def _from_decorator(cls, decorator: _decorators.Decorator[_decorators.FieldValid\n \n @dataclasses.dataclass(frozen=True, **_internal_dataclass.slots_true)\n class BeforeValidator:\n-   ",
+        "review_comment": "```suggestion\r\n    \"\"\"Usage docs: https://docs.pydantic.dev/2.10/concepts/validators/#field-before-validator\r\n```",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.38876456069946286,
+        "category": "DOCUMENTATION"
+      },
+      {
+        "id": "pydantic_pydantic_pr12287_comment38",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/api/standard_library_types.md",
+        "code_snippet": "@@ -101,138 +541,167 @@ from pydantic import BaseModel\n \n \n class Birthday(BaseModel):\n-    d: date = None\n+    d: date\n \n \n my_birthday = Birthday(d=1679616000.0)\n \n print(my_birthday.model_dump())\n ",
+        "review_comment": "It only applies to `date` and `datetime` schemas it seems. Maybe it should for `time` and `timedelta`?",
+        "reviewer": "Viicos",
+        "similarity": 0.38233508062362676,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr12287_comment41",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/api/standard_library_types.md",
+        "code_snippet": "@@ -101,138 +541,167 @@ from pydantic import BaseModel\n \n \n class Birthday(BaseModel):\n-    d: date = None\n+    d: date\n \n \n my_birthday = Birthday(d=1679616000.0)\n \n print(my_birthday.model_dump())\n ",
+        "review_comment": "It probably should, yes. This would be our chance to make it so, as it's getting released in 2.12 😬",
+        "reviewer": "davidhewitt",
+        "similarity": 0.3759594494034262,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\good_code_02_modern_python.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 1046,
+      "categories_found": [
+        "documentation",
+        "bug"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The provided code defines a `User` dataclass with validation, but it has some issues with validation logic and can be improved for better maintainability and security.",
+    "issues": [
+      {
+        "title": "🐛 [Bug] - Invalid Email Validation",
+        "details": []
+      },
+      {
+        "title": "🐛 [Bug] - Name Validation",
+        "details": []
+      },
+      {
+        "title": "🚫 [Security] - Potential Denial of Service (DoS)",
+        "details": []
+      },
+      {
+        "title": "💡 [Style] - Improper Use of Setter",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "## Summary\nThe provided code defines a `User` dataclass with validation, but it has some issues with validation logic and can be improved for better maintainability and security.\n\n## Issues Found\n\n### 🐛 [Bug] - Invalid Email Validation\n**Location**: `__post_init__` method\n**Issue**: The email validation logic is incorrect. It checks if the email is empty or contains an `@` symbol, but it should check if the email contains at least one `@` symbol and a domain extension (like `.com`, `.org`, etc.).\n**Suggestion**: Use a regular expression to validate the email format.\n**Example**: [pydantic/pydantic] (Similarity: 0.45)\n\n### 🐛 [Bug] - Name Validation\n**Location**: `__post_init__` method\n**Issue**: The name validation logic is incorrect. It checks if the name is empty or has a length less than 2, but it should check if the name is not empty and has a minimum length.\n**Suggestion**: Use the `min_length` validator from Pydantic.\n**Example**: [pydantic/pydantic] (Similarity: 0.38)\n\n### 🚫 [Security] - Potential Denial of Service (DoS)\n**Location**: `deactivate` method\n**Issue**: The `deactivate` method modifies the `is_active` attribute, but it does not check if the user is already deactivated. This could lead to a potential DoS attack.\n**Suggestion**: Add a check to ensure the user is not already deactivated.\n**Example**: [Requests] (Similarity: 0.42)\n\n### 💡 [Style] - Improper Use of Setter\n**Location**: `age_days` property\n**Issue**: The `age_days` property uses the `datetime.now()` function, which is not thread-safe. This could lead to inconsistent results.\n**Suggestion**: Use a thread-safe approach, such as using a cached value or a separate method to calculate the age.\n**Example**: [FastAPI] (Similarity: 0.39)\n\n## Positive Aspects\nThe code uses dataclasses and Pydantic for validation, which is a good practice.\n\n## References\nThe following example reviews were most relevant:\n[pydantic/pydantic] (Similarity: 0.45), [pydantic/pydantic] (Similarity: 0.42), [pydantic/pydantic] (Similarity: 0.38), [Requests] (Similarity: 0.42), [FastAPI] (Similarity: 0.39)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1657,
+      "cost": 0.0,
+      "latency": 5.877546548843384
+    }
+  },
+  "performance": {
+    "total_tokens": 1657,
+    "cost": 0.0,
+    "latency": 5.877546548843384,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "timestamp": "2025-10-28T20:09:15.571402",
+  "input": {
+    "code": "def calculate_discount(price, customer_type, quantity, coupon_code):\n    \"\"\"Calculate final price with discounts.\"\"\"\n    base_discount = 0.05 if customer_type == 'regular' else 0.15\n    \n    if quantity > 100:\n        base_discount += 0.10\n    elif quantity > 50:\n        base_discount += 0.05\n    \n    if coupon_code:\n        base_discount += 0.05\n    \n    return price * (1 - base_discount)\n",
+    "file_path": "test_cases\\style_01_missing_type_hints.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr10763_comment738",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -346,35 +346,38 @@ def _extract_decimal_digits_info(decimal: Decimal) -> tuple[int, int]:\n     Though this could be divided into two separate functions, the logic is easier to follow if we couple t",
+        "review_comment": "If the `decimal` argument is not a `Decimal` type, which is accepted as Any in the root function, an `AttributeError` might occur because the as_tuple",
+        "reviewer": "tkasuz",
+        "similarity": 0.36665277481079106,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr10763_comment735",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -386,10 +387,11 @@ def max_digits_validator(x: Any, max_digits: Any) -> Any:\n \n \n def decimal_places_validator(x: Any, decimal_places: Any) -> Any:\n-    decimal_places_, _ = _extract_decimal_digits",
+        "review_comment": "I ended up checking the Decimal type here instead\r\nhttps://github.com/pydantic/pydantic/blob/f6919b5ded203cf390d3df7863cbbf1022c3b7cf/pydantic/_intern",
+        "reviewer": "tkasuz",
+        "similarity": 0.35457898378372193,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10763_comment739",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -346,35 +346,38 @@ def _extract_decimal_digits_info(decimal: Decimal) -> tuple[int, int]:\n     Though this could be divided into two separate functions, the logic is easier to follow if we couple t",
+        "review_comment": "Would it be better to change the argument type to `Any` and add another `assert` to check if the type is `Decimal`? 🤔",
+        "reviewer": "tkasuz",
+        "similarity": 0.32083903980255124,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11987_comment51",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/json_schema.py",
+        "code_snippet": "@@ -674,7 +674,49 @@ def decimal_schema(self, schema: core_schema.DecimalSchema) -> JsonSchemaValue:\n         Returns:\n             The generated JSON schema.\n         \"\"\"\n-        json_schema = self.",
+        "review_comment": "With `max_digits` set to e.g. 5, it wrongfully matches `'1000.1111111'`, etc.",
+        "reviewer": "Viicos",
+        "similarity": 0.27690799427032475,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr11987_comment49",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/json_schema.py",
+        "code_snippet": "@@ -674,7 +674,31 @@ def decimal_schema(self, schema: core_schema.DecimalSchema) -> JsonSchemaValue:\n         Returns:\n             The generated JSON schema.\n         \"\"\"\n-        json_schema = self.",
+        "review_comment": "I think you don't need to escape the `.` when inside brackets.",
+        "reviewer": "Viicos",
+        "similarity": 0.2736388618946075,
+        "category": null
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\style_01_missing_type_hints.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 921,
+      "categories_found": [
+        "bug"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The code calculates a final price with discounts based on the customer type, quantity, and coupon code. However, there are some issues with the logic and code style.",
+    "issues": [
+      {
+        "title": "🐛 [bug] - Unnecessary Conditional Check",
+        "details": []
+      },
+      {
+        "title": "🐛 [bug] - Incorrect Coupon Code Handling",
+        "details": []
+      },
+      {
+        "title": "💡 [general] - Code Readability",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [],
+    "raw_content": "## Summary\nThe code calculates a final price with discounts based on the customer type, quantity, and coupon code. However, there are some issues with the logic and code style.\n\n## Issues Found\n\n### 🐛 [bug] - Unnecessary Conditional Check\n**Location**: `if quantity > 100:` and `elif quantity > 50:`\n**Issue**: The conditions `quantity > 100` and `quantity > 50` are mutually exclusive. The `elif` clause will never be executed.\n**Suggestion**: Remove the `elif` clause and use separate conditions for each discount threshold.\n**Example**: Similar to Example 1 in the provided examples, where the reviewer suggests dividing the function into two separate functions.\n\n### 🐛 [bug] - Incorrect Coupon Code Handling\n**Location**: `if coupon_code:`\n**Issue**: The code only adds a 5% discount when a coupon code is present, regardless of the customer type or quantity. This may not be the intended behavior.\n**Suggestion**: Reconsider the logic for coupon code handling, possibly introducing a separate condition or using a different data structure to store coupon code discounts.\n**Example**: Similar to Example 4 in the provided examples, where the reviewer highlights a bug related to decimal schema.\n\n### 💡 [general] - Code Readability\n**Location**: `base_discount = 0.05 if customer_type == 'regular' else 0.15`\n**Issue**: The code uses a ternary operator with a complex condition. This can make the code harder to read and understand.\n**Suggestion**: Consider using a separate variable or a more explicit if-else statement to improve code readability.\n**Example**: Similar to Example 5 in the provided examples, where the reviewer suggests simplifying the code.\n\n## Positive Aspects\nThe code uses type hints and has a clear function name.\n\n## References\nExample 1: pydantic/pydantic (tkasuz) - similar review of a complex conditional statement\nExample 4: pydantic/pydantic (Viicos) - similar review of a bug related to decimal schema\nExample 5: pydantic/pydantic (Viicos) - similar review of code readability",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1455,
+      "cost": 0.0,
+      "latency": 6.2885847091674805
+    }
+  },
+  "performance": {
+    "total_tokens": 1455,
+    "cost": 0.0,
+    "latency": 6.2885847091674805,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}

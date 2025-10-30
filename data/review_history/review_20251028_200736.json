@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-10-28T20:07:31.010904",
+  "input": {
+    "code": "def calculate_prices(items):\n    \"\"\"Calculate prices with tax.\"\"\"\n    results = []\n    for item in items:\n        base_price = item['price']\n        tax = base_price * get_tax_rate()  # DB call each time\n        shipping = calculate_shipping(item)  # API call each time\n        total = base_price + tax + shipping\n        results.append(total)\n    return results\n",
+    "file_path": "test_cases\\performance_02_repeated_computation.py",
+    "context": null
+  },
+  "retrieval": {
+    "similar_reviews": [
+      {
+        "id": "pydantic_pydantic_pr10763_comment738",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/_internal/_validators.py",
+        "code_snippet": "@@ -346,35 +346,38 @@ def _extract_decimal_digits_info(decimal: Decimal) -> tuple[int, int]:\n     Though this could be divided into two separate functions, the logic is easier to follow if we couple t",
+        "review_comment": "If the `decimal` argument is not a `Decimal` type, which is accepted as Any in the root function, an `AttributeError` might occur because the as_tuple",
+        "reviewer": "tkasuz",
+        "similarity": 0.36623209158579506,
+        "category": "BUG"
+      },
+      {
+        "id": "pydantic_pydantic_pr10782_comment871",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/concepts/fields.md",
+        "code_snippet": "@@ -831,7 +831,56 @@ The property will also be taken into account in the JSON Schema.\n     However, note that Pydantic will *not* perform any additional logic on the wrapped property\n     (validation,",
+        "review_comment": "```suggestion\r\nimport json\r\nfrom pydantic import BaseModel, computed_field\r\n\r\n\r\nclass Box(BaseModel):\r\n    width: float\r\n    height: float\r\n    depth:",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.3651681303977966,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10868_comment706",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/main.py",
+        "code_snippet": "@@ -81,6 +81,20 @@\n _object_setattr = _model_construction.object_setattr\n \n \n+def _model_field_setattr_handler(model: BaseModel, name: str, val: Any) -> None:\n+    model.__dict__[name] = val\n+    mode",
+        "review_comment": "```suggestion\r\n_SIMPLE_SETATTR_HANDLERS: Mapping[str, Callable[[BaseModel, str, Any], None]] = {\r\n```",
+        "reviewer": "Viicos",
+        "similarity": 0.3039602352778117,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr11987_comment49",
+        "repo": "pydantic/pydantic",
+        "file_path": "pydantic/json_schema.py",
+        "code_snippet": "@@ -674,7 +674,31 @@ def decimal_schema(self, schema: core_schema.DecimalSchema) -> JsonSchemaValue:\n         Returns:\n             The generated JSON schema.\n         \"\"\"\n-        json_schema = self.",
+        "review_comment": "I think you don't need to escape the `.` when inside brackets.",
+        "reviewer": "Viicos",
+        "similarity": 0.29434217166900634,
+        "category": null
+      },
+      {
+        "id": "pydantic_pydantic_pr10782_comment872",
+        "repo": "pydantic/pydantic",
+        "file_path": "docs/concepts/fields.md",
+        "code_snippet": "@@ -831,7 +831,38 @@ The property will also be taken into account in the JSON Schema.\n     However, note that Pydantic will *not* perform any additional logic on the wrapped property\n     (validation,",
+        "review_comment": "You'll want to use the `\"\"\"` blocks here, not `#>`. That should fix the formatting.",
+        "reviewer": "sydney-runkle",
+        "similarity": 0.2840571360588074,
+        "category": "STYLE"
+      }
+    ],
+    "metadata": {
+      "file_path": "test_cases\\performance_02_repeated_computation.py",
+      "context": null,
+      "retrieval_count": 5,
+      "prompt_tokens": 908,
+      "categories_found": [
+        "style",
+        "bug"
+      ]
+    }
+  },
+  "review": {
+    "summary": "The `calculate_prices` function has potential performance issues and could benefit from improvements in scalability and maintainability.",
+    "issues": [
+      {
+        "title": "🐛 [Performance] - Redundant database calls",
+        "details": []
+      },
+      {
+        "title": "🐛 [Performance] - Unnecessary calculations",
+        "details": []
+      },
+      {
+        "title": "✨ [Style] - Redundant variable names",
+        "details": []
+      }
+    ],
+    "suggestions": [],
+    "positive_aspects": [
+      "The function uses a clear and descriptive docstring.",
+      "The code is generally well-structured.",
+      "The Requests library example on [caching](https://requests.readthedocs.io/en/master/user/advanced/#session-objects)",
+      "The FastAPI example on [reusing database connections](https://fastapi.tiangolo.com/advanced/connections/)",
+      "The pydantic example on [variable naming](https://pydantic-docs.helpmanual.io/usage/naming_conventions/)"
+    ],
+    "raw_content": "## Summary\n\nThe `calculate_prices` function has potential performance issues and could benefit from improvements in scalability and maintainability.\n\n## Issues Found\n\n### 🐛 [Performance] - Redundant database calls\n**Location**: `get_tax_rate()` and `calculate_shipping(item)` calls inside the loop\n**Issue**: The `get_tax_rate()` and `calculate_shipping(item)` functions are called on every iteration, resulting in unnecessary database and API calls.\n**Suggestion**: Consider caching the results of these calls or reorganizing the logic to minimize database and API interactions.\n**Example**: Refer to the example from the Requests library on [caching](https://requests.readthedocs.io/en/master/user/advanced/#session-objects) to see how to implement caching.\n\n### 🐛 [Performance] - Unnecessary calculations\n**Location**: `tax = base_price * get_tax_rate()` and `shipping = calculate_shipping(item)`\n**Issue**: The tax and shipping calculations are repeated for each item, which can be avoided if done outside the loop.\n**Suggestion**: Calculate the tax and shipping once before the loop and then use the results for each item.\n**Example**: Refer to the FastAPI example on [reusing database connections](https://fastapi.tiangolo.com/advanced/connections/) to see how to minimize database interactions.\n\n### ✨ [Style] - Redundant variable names\n**Location**: `base_price`, `tax`, and `shipping` variables\n**Issue**: The variable names are not descriptive and can be shortened to improve readability.\n**Suggestion**: Use more descriptive variable names to improve code readability.\n**Example**: Refer to the pydantic example on [variable naming](https://pydantic-docs.helpmanual.io/usage/naming_conventions/) to see how to name variables effectively.\n\n## Positive Aspects\n\n* The function uses a clear and descriptive docstring.\n* The code is generally well-structured.\n\n## References\n\n* The Requests library example on [caching](https://requests.readthedocs.io/en/master/user/advanced/#session-objects)\n* The FastAPI example on [reusing database connections](https://fastapi.tiangolo.com/advanced/connections/)\n* The pydantic example on [variable naming](https://pydantic-docs.helpmanual.io/usage/naming_conventions/)",
+    "metadata": {
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "provider": "openrouter",
+      "tokens": 1444,
+      "cost": 0.0,
+      "latency": 2.3187716007232666
+    }
+  },
+  "performance": {
+    "total_tokens": 1444,
+    "cost": 0.0,
+    "latency": 2.3187716007232666,
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter"
+  }
+}
